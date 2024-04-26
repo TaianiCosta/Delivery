@@ -50,6 +50,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem "shoulda-matchers"
   gem "faker"
+  gem "rackup"
 end
 
 group :development do
@@ -67,3 +68,7 @@ end
 
 
 gem "devise", "~> 4.9"
+
+gem "jwt", "~> 2.8"
+
+gem "rack-cors", "~> 2.0"

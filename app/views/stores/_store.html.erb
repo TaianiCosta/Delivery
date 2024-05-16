@@ -1,7 +1,7 @@
-<div id="<%= dom_id store %>">
+<div id="<%= dom_id(store) %>">
   <p>
     <strong>Name:</strong>
-    <%= store.name %>
+    <%= store.name.html_safe %>
+    <%= store.user.email %>
   </p>
-
 </div>

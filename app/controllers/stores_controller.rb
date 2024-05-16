@@ -1,29 +1,35 @@
 class StoresController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate!
   before_action :set_store, only: %i[ show edit update destroy ]
+  skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
+  rescue_from User::InvalidToken, with: :not_authorized
 
   # GET /stores or /stores.json
   def index
-    @stores = Store.where(user: current_user)
+    if current_user.admin?
+      @stores = Store.all
+    else
+      @stores = Store.where(user: current_user)
+    end
+  end
+
+  def new
+    @store = Store.new
+    if current_user.admin?
+      @sellers = User.where(role: :seller)
+    end
   end
 
   # GET /stores/1 or /stores/1.json
   def show
   end
 
-  # GET /stores/new
-  def new
-    @store = Store.new
-  end
-
-  # GET /stores/1/edit
-  def edit
-  end
-
   # POST /stores or /stores.json
   def create
     @store = Store.new(store_params)
-    @store.user = current_user
+    if !current_user.admin?
+      @store.user = current_user
+    end
 
     respond_to do |format|
       if @store.save
@@ -59,6 +65,7 @@ class StoresController < ApplicationController
     end
   end
 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_store
@@ -67,6 +74,16 @@ class StoresController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def store_params
-      params.require(:store).permit(:name)
+      required = params.require(:store)
+
+      if current_user.admin?
+        required.permit(:name, :user_id)
+      else
+        required.permit(:name)
+      end
+    end
+
+    def not_authorized(e)
+      render json: {message: "Nope!"}, status: 401
     end
 end

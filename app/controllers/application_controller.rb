@@ -18,8 +18,7 @@ class ApplicationController < ActionController::Base
     def current_credential
         return nil if request.format != Mime[:json]
         
-        Credential.
-            find_by(key: request.headers["X-API-KEY"]) || Credential.new
+        Credential.find_by(key: request.headers["X-API-KEY"]) || Credential.new
     end
         
     private

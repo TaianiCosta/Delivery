@@ -8,6 +8,7 @@ class RegistrationsController < ApplicationController
   end
 
   def sign_in
+    access = current_credential.access
     user = User.find_by(email: sign_in_params[:email])
 
     if !user || !user.valid_password?(sign_in_params[:password])
@@ -23,7 +24,11 @@ class RegistrationsController < ApplicationController
     @user.role = current_credential.access
 
     if @user.save
-      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+      render json: {"email": @user.email}, 
+      status: :created
+    else
+      render json: {"Error": "unprocessable"},
+      status: :unprocessable_entity
     end
   end
 

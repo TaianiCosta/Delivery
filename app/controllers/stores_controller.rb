@@ -1,7 +1,7 @@
 class StoresController < ApplicationController
   before_action :authenticate!
   before_action :set_store, only: %i[ show edit update destroy ]
-  skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
+  skip_forgery_protection only: [ :create, :update, :destroy ]
   rescue_from User::InvalidToken, with: :not_authorized
 
   # GET /stores or /stores.json

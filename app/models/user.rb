@@ -11,7 +11,7 @@ class User < ApplicationRecord
   JWT_SECRET = Rails.application.credentials.secret_key_base
       
   def self.from_token(token)
-    decoded = JWT.decode(token, "muito secreto", true, { algarithm: "HS256" })
+    decoded = JWT.decode(token, "muito.secreto", true, { algorithm: "HS256" })
     user_data = decoded[0].with_indifferent_access
     user = User.find_by(id: user_data[:id])
 

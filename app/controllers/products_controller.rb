@@ -8,4 +8,18 @@ class ProductsController < ApplicationController
 
         @products = Product.includes(:store)
     end
+
+    def index
+        respond_to do |format|
+            format.json do
+                if buyer?
+
+                    @products = Product.
+                        where(store_id: params[:store_id]).
+                        order(:title).
+                        page(page)
+                end
+            end
+        end
+    end
 end

@@ -21,7 +21,7 @@ RSpec.describe "/stores", type: :request do
   describe "GET / show" do
     it "renders a successful response with stores data" do
       store = Store.create! valid_attributes
-      get("/store/#{store.id}", headers: {"Accept" => "application/json", "Authorization" => "Bearer #{signed_in["token"]}"
+      get("/stores/#{store.id}", headers: {"Accept" => "application/json", "Authorization" => "Bearer #{signed_in["token"]}"
       })  
       
       json = JSON.parse(response.body)

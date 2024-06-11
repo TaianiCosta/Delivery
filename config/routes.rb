@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :store_items
   devise_for :users
   resources :stores do
     resources :products, only: [:index]

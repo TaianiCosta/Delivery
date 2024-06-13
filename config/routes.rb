@@ -1,12 +1,18 @@
 Rails.application.routes.draw do
   resources :store_items
   devise_for :users
+  
   resources :stores do
     member do
       patch :deactivate
     end
     resources :products, only: [:index]
   end
+
+  namespace :admin do
+    resources :sellers
+  end
+    
   
   get "listing" => "products#listing"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

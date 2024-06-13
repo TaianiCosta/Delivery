@@ -1,7 +1,7 @@
 class StoresController < ApplicationController
   before_action :authenticate!
-  before_action :set_store, only: %i[ show edit update destroy ]
-  skip_forgery_protection only: %i[create update]
+  before_action :set_store, only: %i[ show edit update destroy deactivate ]
+  skip_forgery_protection only: %i[create update deactivate]
   rescue_from User::InvalidToken, with: :not_authorized
 
   # GET /stores or /stores.json
@@ -65,7 +65,16 @@ class StoresController < ApplicationController
     end
   end
 
-
+  # PATCH /stores/1/deactivate
+  def deactivate
+    @store.update(active: false)
+    
+    respond_to do |format|
+      format.html { redirect_to stores_url, notice: "Store was successfully deactivated." }
+      format.json { head :no_content }
+    end
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_store
@@ -77,7 +86,7 @@ class StoresController < ApplicationController
       required = params.require(:store)
 
       if current_user.admin?
-        required.permit(:name, :user_id)
+        required.permit(:name, :user_id, :active)
       else
         required.permit(:name)
       end

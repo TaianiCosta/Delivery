@@ -9,6 +9,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   JWT_SECRET = Rails.application.credentials.secret_key_base
+
+  def active_for_authentication?
+    super && active?
+  end
       
   def self.from_token(token)
     decoded = JWT.decode(token, "muito.secreto", true, { algorithm: "HS256" })
@@ -31,4 +35,10 @@ class User < ApplicationRecord
   end
 
   validates :role, presence: true
+  attribute :active, :boolean, default: true
+
+  def deactivate
+    update(active: false)
+  end
+    
 end

@@ -7,6 +7,8 @@
     <%= render store %>
     <p>
       <%= link_to "Show this store", store %>
+      <%= link_to "Edit", edit_store_path(store) %>
+      <%= link_to "Deactivate", deactivate_store_path(store), method: :patch, data: { confirm: "Are you sure you want to deactivate this store?" } %>
     </p>
   <% end %>
 </div>

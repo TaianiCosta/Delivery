@@ -1,0 +1,15 @@
+[33mb2e5dbc[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Adicionando habilidade para o Admin de desativar cadastro (sem excluir) apenas exibir “não autorizado” mesmo com o login correto
+[33m14fb2aa[m Adicionando para o Admin a função de excluir sem deletar a loja, somente o comprador não consegue visualizar
+[33m37726e7[m Criando CRUD para produtos
+[33mf41282f[m Ajustando o erro na exibição do signin
+[33mdd58beb[m Atualizando os produtos
+[33m21bf285[m Criando e modificando para organizar com um arquivo Docker
+[33m0078b06[m Organizando os pedidos
+[33m365e4ed[m Corrigindo erro de rota json
+[33mfffb96c[m Atualizando os testes
+[33m1e1ee4e[m 2 falhas solucionadas
+[33maee1f61[m Iniciar a fase de testes
+[33mf0aa940[m Iniciando os testes, arrumando as falhas
+[33m823ae07[m Criar guia para automatizar testes de API (json)
+[33m8835946[m Criar modelos de lojas
+[33m22bbf11[m Iniciando o projeto, com o Ruby 3.2.2

@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
     before_action :authenticate!
+    before_action :set_locale!
 
     def listing
         if !current_user.admin?
@@ -13,6 +14,7 @@ class ProductsController < ApplicationController
         respond_to do |format|
             format.json do
                 if buyer?
+                  page = params.fetch(:page, 1)
 
                     @products = Product.
                         where(store_id: params[:store_id]).

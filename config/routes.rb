@@ -2,11 +2,10 @@ Rails.application.routes.draw do
   resources :store_items
   devise_for :users
   
+  get "/stores/list" => "stores#list"
   resources :stores do
-    member do
-      patch :deactivate
-    end
     resources :products, only: [:index]
+    get "/orders/new" => "stores#new_order"
   end
 
   namespace :admin do

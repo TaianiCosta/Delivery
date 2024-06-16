@@ -1,7 +1,7 @@
 class StoresController < ApplicationController
-  before_action :authenticate!
-  before_action :set_store, only: %i[ show edit update destroy deactivate ]
-  skip_forgery_protection only: %i[create update deactivate]
+  before_action :authenticate!, except: %i[list]
+  before_action :set_store, only: %i[ show edit update destroy ]
+  skip_forgery_protection only: %i[create update list]
   rescue_from User::InvalidToken, with: :not_authorized
 
   # GET /stores or /stores.json
@@ -65,16 +65,38 @@ class StoresController < ApplicationController
     end
   end
 
-  # PATCH /stores/1/deactivate
-  def deactivate
-    @store.update(active: false)
-    
+  def list
     respond_to do |format|
-      format.html { redirect_to stores_url, notice: "Store was successfully deactivated." }
-      format.json { head :no_content }
+      format_json do
+        paginated_stores
+      end
     end
   end
-  
+
+
+  def new_order
+    response.headers["Content-Type"] = "text/event-stream"
+    sse = SSE.new(response.stream, retry: 300, event: "waiting-orders")
+    sse.write({hello: "world!"}, event: "waiting-order")
+    
+    EventMachine.run do
+      EventMachine::PeriodicTimer.new(3) do
+        order = Order.last
+        #order = Order.where(store_id: params[:store_id], status: :created)
+        if order
+          message = { time: Time.now, order: order }
+          sse.write(message, event: "new-order")
+        else
+          sse.write(message, event: "no")
+        end
+      end
+    end
+  rescue IOError, ActionController::Live::ClientDisconnected
+    sse.close
+  ensure
+    sse.close
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_store
@@ -94,5 +116,10 @@ class StoresController < ApplicationController
 
     def not_authorized(e)
       render json: {message: "Nope!"}, status: 401
+    end
+
+    def paginated_stores
+      page = params.fech(:page, 1)
+      @stores = Store.order(:name).page(page)
     end
 end

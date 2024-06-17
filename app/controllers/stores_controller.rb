@@ -1,7 +1,7 @@
 class StoresController < ApplicationController
+  skip_forgery_protection only: %i[create update list]
   before_action :authenticate!, except: %i[list]
   before_action :set_store, only: %i[ show edit update destroy ]
-  skip_forgery_protection only: %i[create update list]
   rescue_from User::InvalidToken, with: :not_authorized
 
   # GET /stores or /stores.json

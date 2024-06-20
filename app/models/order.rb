@@ -12,15 +12,6 @@ class Order < ApplicationRecord
         end
     end
 
-    private
-
-    def buyer_role
-        if !buyer.buyer?
-    
-            errors.add(:buyer, "should be a `user.buyer`")
-        end
-    end
-
     def accept
         if self.state == :created
             update! state: :accepted
@@ -28,6 +19,15 @@ class Order < ApplicationRecord
         # Send a Notification
         else
             raise "Can't change to `:accepted` from #{self.state}"
+        end
+    end
+
+    private
+
+    def buyer_role
+        if !buyer.buyer?
+    
+            errors.add(:buyer, "should be a `user.buyer`")
         end
     end
 end

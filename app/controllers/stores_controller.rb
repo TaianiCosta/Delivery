@@ -73,7 +73,6 @@ class StoresController < ApplicationController
     end
   end
 
-
   def new_order
     response.headers["Content-Type"] = "text/event-stream"
     sse = SSE.new(response.stream, retry: 300, event: "waiting-orders")
@@ -91,7 +90,8 @@ class StoresController < ApplicationController
         end
       end
     end
-  rescue IOError, ActionController::Live::ClientDisconnected
+
+  rescue ActionController::Live::ClientDisconnected
     sse.close
   ensure
     sse.close

@@ -1,12 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe "stores/edit", type: :view do
-  let(:seller) { create(:user, role: :seller) }
+  let(:user) {
+    user = User.new(
+      email: "user@example.com",
+      password: "123456",
+      password_confirmation: "123456",
+      role: :seller
+    )
+    user.save!
+    user
+  }
 
-  let(:store) {create(:store, user: seller)}
+  let(:store) {
+    Store.create!(
+      name: "MyString",
+      user: user
+    )
+  }
 
   before(:each) do
-    allow(view).to receive(:current_user).and_return(seller)
     assign(:store, store)
   end
 

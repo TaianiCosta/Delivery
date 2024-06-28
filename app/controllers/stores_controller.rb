@@ -24,6 +24,10 @@ class StoresController < ApplicationController
   def show
   end
 
+  # GET /stores/1/edit
+  def edit
+  end
+
   # POST /stores or /stores.json
   def create
     @store = Store.new(store_params)
@@ -71,30 +75,6 @@ class StoresController < ApplicationController
         paginated_stores
       end
     end
-  end
-
-  def new_order
-    response.headers["Content-Type"] = "text/event-stream"
-    sse = SSE.new(response.stream, retry: 300, event: "waiting-orders")
-    sse.write({hello: "world!"}, event: "waiting-order")
-    
-    EventMachine.run do
-      EventMachine::PeriodicTimer.new(3) do
-        order = Order.last
-
-        if order
-          message = { time: Time.now, order: order }
-          sse.write(message, event: "new-order")
-        else
-          sse.write(message, event: "no")
-        end
-      end
-    end
-
-  rescue ActionController::Live::ClientDisconnected
-    sse.close
-  ensure
-    sse.close
   end
 
   private

@@ -6,7 +6,7 @@ RSpec.describe "stores/index", type: :view do
       email: "user@example.com", 
       password: "123456", 
       password_confirmation: "123456", 
-      role: "seller"
+      role: :seller
       )
       user.save!
       user 
@@ -14,7 +14,6 @@ RSpec.describe "stores/index", type: :view do
 
   before(:each) do
     assign(:stores, [Store.create!(name: "Store 1", user: user), Store.create!(name: "Store 2", user: user)])
-    allow(view).to receive(:current_user).and_return(user)
   end
 
   skip it "renders a list of stores" do

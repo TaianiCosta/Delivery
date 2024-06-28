@@ -1,9 +1,8 @@
 class OrdersController < ApplicationController
     skip_forgery_protection
     before_action :authenticate!
-    before_action :set_order, only: %i[show accept_order order_ready_for_pickup dispatch_order deliver_order cancel_order]
-    before_action :restrict_buyer_access, only: %i[accept_order order_ready_for_pickup dispatch_order deliver_order cancel_order]
-    rescue_from User::InvalidToken, with: :not_authorized
+    before_action :only_buyers!
+
     
     def create
         @order = Order.new(order_params)

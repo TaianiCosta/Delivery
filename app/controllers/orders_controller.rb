@@ -5,7 +5,6 @@ class OrdersController < ApplicationController
     before_action :restrict_buyer_access, only: %i[accept_order order_ready_for_pickup dispatch_order deliver_order cancel_order]
     rescue_from User::InvalidToken, with: :not_authorized
     
-    # POST /buyers/orders
     def create
         @order = Order.new(order_params)
         @order.buyer = current_user if current_user.buyer?

@@ -81,7 +81,7 @@ class StoresController < ApplicationController
     EventMachine.run do
       EventMachine::PeriodicTimer.new(3) do
         order = Order.last
-        #order = Order.where(store_id: params[:store_id], status: :created)
+
         if order
           message = { time: Time.now, order: order }
           sse.write(message, event: "new-order")
@@ -98,12 +98,12 @@ class StoresController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
     def set_store
       @store = Store.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
+
     def store_params
       required = params.require(:store)
 
